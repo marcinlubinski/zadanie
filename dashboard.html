@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administracyjny</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+   <div class="container">
+       <div class="table-responsive">
+          
+          
+  
+
+           <h1>Dane Ogolne</h1>
+           
+           <ul>
+               <li>Ilość kont: </li>
+               <li>Ilośc kont aktywnych:</li>
+           </ul>
+       </div>
+       
+<hr>
+  <br>
+   
+   
+   <br>
+   <br>
+   
+    
+    <div class="optionsDiv">
+        Filtruj Role: 
+        <select id="selectField">
+            <option value="All" selected>All</option>
+            <option value="admin">admin</option>
+            <option value="support">support</option>
+            <option value="manager">manager</option>
+
+        </select>
+    </div>
+   <br>
+   
+   <div class="form-group pull-right">
+       <input type="text" class="search form-control" placeholder="Szukaj...">
+   </div>
+   <table class="table table-bordered table-striped" id="data_table">
+       <tr>
+ 
+           <th>Email</th>
+           <th>Role</th>
+           <th>Created</th>
+           <th>Active </th>
+           <th>IP</th>
+           <th>Last Login</th>
+           <th>Name</th>
+           <th>Surname</th>
+       </tr>
+<!--
+       <tr class="no-result warning">
+           <td colspan="8">Nie znaleziono</td>
+       </tr>
+-->
+   </table>
+  </div>
+  <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script src="data.json"></script>
+<script src="data-filter.js"></script>
+</body>
+</html>
+
+<script>
+$(document).ready(function(){
+    $.getJSON("data.json", function(data){
+       var data_data = '';
+        
+        $.each(data, function(key, value){
+          data_data += '<tr>';
+          data_data += '<td>' +value.email+'</td>';
+          data_data += '<td>' +value.role+'</td>';
+          data_data += '<td>' +value.dataCreated+'</td>';
+          data_data += '<td>' +value.activate+'</td>';
+          data_data += '<td>' +value.ipRegister+'</td>';
+          data_data += '<td>' +value.lastLogin+'</td>';
+          data_data += '<td>' +value.firsname+'</td>';
+          data_data += '<td>' +value.surname+'</td>';
+        });
+        
+        $('#data_table').append(data_data);
+    });
+});
+  
+    /* SELECT ROLE ------------------------------------------------ */
+    
+$(document).ready(function () {
+    $.getJSON("data.json", function(data) {
+        
+        function addRemoveClass(theRows) {
+
+            theRows.removeClass("odd even");
+            theRows.filter(":odd").addClass("odd");
+            theRows.filter(":even").addClass("even");
+        }
+
+    var rows = $("table#data_table tr:not(:first-child)");
+
+    addRemoveClass(rows);
+
+
+    $("#selectField").on("change", function() {
+
+        var selected = this.value;
+
+        if (selected != "All") {
+// tu nie wiem jak zrobic ogarnął żeby wybrał np. "support" - <td> support </td>
+            // nie działa mi to 
+            rows.filter("<td>" + selected + "<td>" ).show();
+            rows.not("<td>" + selected + "<td>").hide();
+            var visibleRows = rows.filter("<td>" + selected + "<td>");
+            addRemoveClass(visibleRows);
+        } else {
+
+            rows.show();
+            addRemoveClass(rows);
+
+        }
+
+    });
+    });
+});
+    
+</script>
